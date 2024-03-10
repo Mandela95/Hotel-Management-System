@@ -1,0 +1,79 @@
+.signInCol {
+  height: 96vh;
+  background-image: url("../../../../src/assets/images/login0.png");
+  background-size: 90% 100%;
+  background-repeat: no-repeat;
+}
+.signUPCol {
+  height: 96vh;
+  background-image: url("../../../../src/assets/images/registerimg.png");
+  background-size: 90% 100%;
+  background-repeat: no-repeat;
+}
+.forgetPassCol {
+  height: 96vh;
+  background-image: url("../../../../src/assets/images/resetPass.png");
+  background-size: 90% 100%;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 899px) {
+  .signIn {
+    background-image: url("../../../../src/assets/images/login0.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: color;
+    min-height: 100vh !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    border-image: fill 0 linear-gradient(rgba(0, 0, 0, 0.418), #000);
+    color: #fff;
+  }
+  .signUp {
+    background-image: url("../../../../src/assets/images/registerimg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: color;
+    min-height: 100vh !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    border-image: fill 0 linear-gradient(rgba(0, 0, 0, 0.418), #000);
+    color: #fff;
+  }
+  .forgetPass {
+    background-image: url("../../../../src/assets/images/resetPass.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: color;
+    min-height: 100vh !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    border-image: fill 0 linear-gradient(rgba(0, 0, 0, 0.418), #000);
+    color: #fff;
+  }
+  .ptXs {
+    padding-top: 70px !important;
+  }
+}
+
+.formImage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #3252df;
+  margin-top: 1.4rem;
+  border-radius: 6px;
+}
+.formImage input {
+  width: 30% !important;
+  position: absolute;
+  top: 10%;
+  left: 28%;
+  cursor: pointer;
+  opacity: 0;
+}

@@ -1,0 +1,31 @@
+/* Signin.module.css */
+
+.frame {
+  display: grid;
+  width: var(--w);
+  height: var(--h);
+  background: pink;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  position: relative;
+  overflow: hidden;
+}
+
+.slice {
+  width: calc(100% + 0.5px);
+  height: calc(100% + 0.5px);
+  background-image: var(--img);
+  background-size: calc(100% / 8) calc(100% / 8);
+  background-position: calc(var(--x) * 100%) calc(var(--y) * 100%);
+  position: relative;
+  transition: all 1s ease-in-out;
+}
+
+.frame:hover .slice {
+  transform: translate(0, 0) rotate(0);
+}
+
+.frame .slice {
+  transform: translateX(calc(var(--x) * 100% - 50vw))
+    translateY(calc(var(--y) * 50% - 25vh)) rotate(calc(360deg * var(--x)));
+}

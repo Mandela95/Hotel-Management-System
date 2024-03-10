@@ -1,0 +1,49 @@
+@media (max-width: 960px) {
+  .imageContainer {
+    display: none;
+  }
+}
+
+.loginContainer {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+.imageContainer {
+  height: 100%;
+  padding: 1rem;
+  position: relative;
+}
+
+.logoimage {
+  margin-bottom: 110px;
+}
+.image {
+  /* border-radius: 10px; */
+  width: 100%;
+  height: 700px;
+  /* height: 100%; */
+  /* object-fit: cover; */
+  /* object-position: center; */
+}
+.imageText1 {
+  position: absolute;
+  bottom: 100px;
+  left: 30px;
+  color: white;
+}
+.imageText {
+  position: absolute;
+  bottom: 60px;
+  left: 30px;
+  color: white;
+}
+
+.register {
+  font-weight: bold !important;
+  color: rgb(253, 85, 85) !important;
+  text-decoration: none !important;
+}
+
