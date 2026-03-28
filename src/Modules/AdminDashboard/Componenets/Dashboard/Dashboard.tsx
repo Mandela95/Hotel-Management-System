@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../../Context/AuthContext/AuthContext";
 import { Charts } from "../../../../Interfaces/interFaces";
 import { PieChart } from "@mui/x-charts/PieChart";
@@ -12,9 +13,9 @@ import { getBaseUrl } from "../../../../Utils/Utils";
 import { BarChart } from "@mui/x-charts";
 
 export default function DashboardHome() {
-  const [chartsData, setChartsData] = useState<Charts>({});
-
+  const [chartsData, setChartsData] = useState<Charts>({} as Charts);
   const { requestHeaders } = useAuth();
+  const navigate = useNavigate();
 
   const getCharts = useCallback(async () => {
     try {
@@ -61,19 +62,22 @@ export default function DashboardHome() {
           justifyContent="space-around"
           direction="row"
           margin="auto !important"
+          onClick={() => navigate("/dashboard/rooms")}
           sx={{
             bgcolor: "rgba(26, 27, 30, 1)",
             color: "white",
             borderRadius: "30px",
+            cursor: "pointer",
             minHeight: {
               xs: "50px",
-              lg: "75x",
+              lg: "75px",
             },
             padding: {
               xs: "10px",
               lg: "20px",
             },
             minWidth: { xs: "60%", lg: "20%" },
+            "&:hover": { opacity: 0.85 },
           }}
           boxShadow="2px 2px 2px gray"
         >
@@ -98,10 +102,12 @@ export default function DashboardHome() {
           direction="row"
           margin="auto !important"
           boxShadow="2px 2px 2px gray"
+          onClick={() => navigate("/dashboard/facilities")}
           sx={{
             bgcolor: "rgba(26, 27, 30, 1)",
             color: "white",
             borderRadius: "30px",
+            cursor: "pointer",
             minHeight: {
               xs: "50px",
               lg: "75px",
@@ -111,6 +117,7 @@ export default function DashboardHome() {
               lg: "20px",
             },
             minWidth: { xs: "60%", lg: "20%" },
+            "&:hover": { opacity: 0.85 },
           }}
         >
           <Box>
@@ -134,10 +141,12 @@ export default function DashboardHome() {
           direction="row"
           margin="auto !important"
           boxShadow="2px 2px 2px gray"
+          onClick={() => navigate("/dashboard/ads")}
           sx={{
             bgcolor: "rgba(26, 27, 30, 1)",
             color: "white",
             borderRadius: "30px",
+            cursor: "pointer",
             minHeight: {
               xs: "75px",
               lg: "100px",
@@ -147,6 +156,7 @@ export default function DashboardHome() {
               lg: "20px",
             },
             minWidth: { xs: "60%", lg: "20%" },
+            "&:hover": { opacity: 0.85 },
           }}
         >
           <Box>

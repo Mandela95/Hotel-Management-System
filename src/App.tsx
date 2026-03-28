@@ -19,6 +19,7 @@ import Favorites from "./Modules/LandingPageModule/components/Favorites/Favorite
 import LandingPage from "./Modules/LandingPageModule/components/MainLandingPage/LandingPage";
 import Reviews from "./Modules/LandingPageModule/components/Reviews/Reviews";
 import RoomDetails from "./Modules/LandingPageModule/components/RoomDetails/RoomDetails";
+import Profile from "./Modules/LandingPageModule/components/Profile/Profile";
 import ConfirmPayment from "./Modules/PaymentModule/Components/ConfirmPayment/ConfirmPayment";
 import DetailsPayment from "./Modules/PaymentModule/Components/DetailsPayment/DetailsPayment";
 import FirstPaymentPage from "./Modules/PaymentModule/Components/FirstPaymentPage/FirstPaymentPage";
@@ -118,6 +119,10 @@ export default function App() {
         {
           path: "reviews",
           element: <Reviews />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
         },
       ],
     },

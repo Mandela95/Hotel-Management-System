@@ -316,11 +316,18 @@ export default function AdsList() {
   return (
     <>
       <Box component={`section`} width="100%">
-        <Box p={3} component={"header"} width="100%">
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={6}>
-              <Typography variant="h5" gutterBottom>
-                ADS Table Details
+        <Box p={3} component={"header"} boxShadow={1}>
+          <Grid container rowSpacing={2}>
+            <Grid
+              display={"flex"}
+              justifyContent={{ sm: "start", xs: "center" }}
+              item
+              xs={12}
+              sm={6} 
+              md={6}
+            >
+              <Typography variant="h5" fontWeight={"500"}>
+                Ads Table Details
                 <Typography variant="body1">
                   You can check all details
                 </Typography>
@@ -437,7 +444,7 @@ export default function AdsList() {
                 <Controller
                   name="isActive"
                   control={control}
-                  defaultValue={isUpdate ? String(isActiveSelect) : ""}
+                  defaultValue={isUpdate ? Boolean(isActiveSelect) : undefined}
                   rules={{ required: "isActive is required" }}
                   render={({ field }) => (
                     <Select
@@ -448,7 +455,7 @@ export default function AdsList() {
                       label="isActive"
                       onChange={(e) => {
                         handleActiveChange(e);
-                        field.onChange(e);
+                        field.onChange(e.target.value === "true");
                       }}
                     >
                       <MenuItem value={"false"}>false</MenuItem>

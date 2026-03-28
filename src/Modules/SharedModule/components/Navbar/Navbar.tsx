@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { AppBarProps } from "../../../../Interfaces/interFaces";
 import logoDark from "../../../../assets/images/logo-dark.svg";
 import logoLight from "../../../../assets/images/logo-light.svg";
+import defaultAvatar from "../../../../assets/images/profile.png";
 
 export default function Navbar({
   setTheme,
@@ -31,7 +32,7 @@ export default function Navbar({
   open,
   window,
 }: AppBarProps) {
-  const { loginData, logOut } = useAuth();
+  const { loginData, logOut, currentUser } = useAuth();
   const navigate = useNavigate();
   const [profileMenu, setProfileMenu] = useState(false);
   const [isDark, setIsDark] = useState(() => {
@@ -75,12 +76,12 @@ export default function Navbar({
       >
         <IconButton sx={{ p: 0 }}>
           <Avatar
-            alt="Remy Sharp"
-            src="https://mui.com//static/images/avatar/2.jpg"
+            alt={currentUser?.userName || "User"}
+            src={currentUser?.profileImage || defaultAvatar}
           />
         </IconButton>
         <Typography ml={1} variant="body1">
-          Mandela
+          {currentUser?.userName || "User"}
         </Typography>
         <KeyboardArrowDown />
       </Box>
@@ -96,9 +97,13 @@ export default function Navbar({
         <Button
           fullWidth
           color="inherit"
-          py={1}
-          px={4}
+          onClick={() => {
+            navigate("/profile");
+            setProfileMenu(false);
+          }}
           sx={{
+            py: 1,
+            px: 4,
             "&:hover": {
               backgroundColor: isDark ? "#121212" : "#e0e0e0",
             },
@@ -110,13 +115,14 @@ export default function Navbar({
         <Button
           onClick={() => {
             logOut();
+            setProfileMenu(false);
             navigate("/");
           }}
-          color="inherit"
           fullWidth
-          py={1}
-          px={4}
+          color="inherit"
           sx={{
+            py: 1,
+            px: 4,
             "&:hover": {
               backgroundColor: isDark ? "#121212" : "#e0e0e0",
             },
@@ -233,10 +239,11 @@ export default function Navbar({
             <Typography
               display={"flex"}
               alignItems={"center"}
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1, cursor: "pointer" }}
               variant="h6"
               noWrap
               component="div"
+              onClick={() => navigate("/dashboard")}
             >
               <Box display={"flex"} width={{ xs: "130px", md: "200px" }}>
                 <img

@@ -14,6 +14,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import FaceIcon from "@mui/icons-material/Face";
 import GroupIcon from "@mui/icons-material/Group";
 import PortraitIcon from "@mui/icons-material/Portrait";
+import Shop2Icon from "@mui/icons-material/Shop2";
 import {
   Avatar,
   Backdrop,
@@ -52,9 +53,9 @@ export default function RoomsList() {
     { name: "" },
   ]);
   const [images, setImages] = useState<string[]>([]);
-  const [viewRoom, setViewRoom] = useState<RoomsInterface>({});
+  const [viewRoom, setViewRoom] = useState<RoomsInterface>({} as RoomsInterface);
   const [openFacModal, setOpenFacModal] = useState<boolean>(false);
-  const [openImgModal, setOpenimgModal] = useState<boolean>(false);
+  const [openImgModal, setOpeningModal] = useState<boolean>(false);
   const [openViewModal, setOpenViewModal] = useState<boolean>(false);
 
   const [roomID, setRoomID] = useState<string | null>(null);
@@ -79,14 +80,14 @@ export default function RoomsList() {
 
   const handleCloseViewModal = () => {
     setOpenViewModal(false);
-    setViewRoom({});
+    setViewRoom({} as RoomsInterface);
     setImages([]);
     setFacilities([{ name: "" }]);
   };
 
-  const handleOpenImgModal = () => setOpenimgModal(true);
+  const handleOpenImgModal = () => setOpeningModal(true);
   const handleCloseImgModal = () => {
-    setOpenimgModal(false);
+    setOpeningModal(false);
     viewRoom ? "" : setImages([]);
   };
   const onSubmitDelete = async () => {
@@ -321,7 +322,7 @@ export default function RoomsList() {
         }}
       >
         <Fade in={openFacModal}>
-          <Box sx={styleModaleFac}>
+          <Box sx={styleModalFacility}>
             <Box display={"flex"} justifyContent={"space-between"}>
               <Typography
                 id="transition-modal-title"
@@ -402,7 +403,7 @@ export default function RoomsList() {
                         />
                       </ImageListItem>
                     ))
-                  : "Not Found Images"}
+                  : "No Images Found"}
               </ImageList>
             </Box>
           </Box>
@@ -504,6 +505,7 @@ export default function RoomsList() {
                   <DiscountIcon /> Discount : {viewRoom.discount}
                 </Typography>
                 <Typography variant="h6">
+                  <Shop2Icon sx={{ fontSize: "1em", marginRight: "5px" }} />
                   Facilities :
                   {facilities.length > 0 ? (
                     facilities.map((fac) => (
@@ -528,7 +530,7 @@ export default function RoomsList() {
                   variant="h6"
                   sx={{ display: "flex", alignItems: "center", gap: "3px" }}
                 >
-                  <FaceIcon /> Created By : {viewRoom?.createdBy}
+                  <FaceIcon /> Created By: {viewRoom?.createdBy}
                 </Typography>
                 <Typography
                   variant="h6"
@@ -565,7 +567,7 @@ export default function RoomsList() {
         }}
       >
         <Fade in={openDelete}>
-          <Box sx={styleModaleFac}>
+          <Box sx={styleModalFacility}>
             <Box display={"flex"} justifyContent={"space-between"}>
               <Typography
                 id="transition-modal-title"
@@ -605,7 +607,7 @@ export default function RoomsList() {
   );
 }
 
-const styleModaleFac = {
+const styleModalFacility = {
   position: "absolute" as const,
   top: "50%",
   left: "50%",

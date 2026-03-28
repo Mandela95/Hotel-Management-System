@@ -67,7 +67,7 @@ export default function Signin() {
       setSpinner(false);
       toast.success(res.data.message, signUpWaitToast);
       navigateTolayout(res.data.data.user.role);
-      savLoginData();
+      savLoginData(res.data.data.user);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(
