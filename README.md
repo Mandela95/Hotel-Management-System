@@ -1,30 +1,12 @@
-# React + TypeScript + Vite
+Hotel Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, full-stack Hotel Management System built with React, TypeScript, and Vite. This project provides a comprehensive platform for hotel administration, including user authentication, room and facility management, and an interactive admin dashboard. Key features include:
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+User Authentication: Secure login with JWT, user context, and profile management.
+Admin Dashboard: Visual stat cards, quick navigation to manage rooms, facilities, and advertisements.
+Profile Page: Displays user information from authentication, with seamless context and localStorage integration.
+Responsive Navigation: Intuitive navbar with dynamic links and logo-based home navigation.
+SPA Routing: Robust React Router setup with GitHub Pages compatibility and 404 fallback.
+Automated Deployment: GitHub Actions workflow for continuous deployment to GitHub Pages.
+TypeScript & ESLint: Strong type safety and code quality enforcement.
+This project demonstrates best practices in React SPA development, state management, and CI/CD for static site hosting. Ideal for hotel businesses seeking a scalable, maintainable management solution.
