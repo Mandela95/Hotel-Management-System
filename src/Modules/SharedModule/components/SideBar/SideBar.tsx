@@ -141,7 +141,7 @@ export default function SideBar({ open }: SideBarProps) {
   );
 }
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
