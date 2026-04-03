@@ -207,7 +207,7 @@ export default function App() {
         },
       ],
     },
-  ]);
+  ], { basename: '/Hotel-Management-System' });
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
