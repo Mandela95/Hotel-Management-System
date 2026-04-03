@@ -1,5 +1,7 @@
 Hotel Management System
 
+live-demo: https://mandela95.github.io/Hotel-Management-System/
+
 A modern, full-stack Hotel Management System built with React, TypeScript, and Vite. This project provides a comprehensive platform for hotel administration, including user authentication, room and facility management, and an interactive admin dashboard. Key features include:
 
 User Authentication: Secure login with JWT, user context, and profile management.
