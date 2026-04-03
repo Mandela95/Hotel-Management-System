@@ -23,12 +23,16 @@ export default function AdDashboardLayout({ setTheme }: DashlayoutProps) {
           component="main"
           sx={{
             mt: "64px",
-            minWidth: "100%",
+            width: "100%",
+            minWidth: 0,
+            overflow: "hidden",
           }}
           display="flex"
         >
           <SideBar open={open} />
-          <Outlet />
+          <Box sx={{ flex: 1, minWidth: 0, overflow: "auto", pb: { xs: "80px", md: 0 } }}>
+            <Outlet />
+          </Box>
         </Box>
       </Box>
     </>

@@ -3,21 +3,34 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   Drawer,
+  FormControl,
   IconButton,
+  InputAdornment,
+  InputLabel,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
+  OutlinedInput,
   Toolbar,
-  Tooltip,
   Typography,
   styled,
   useTheme,
 } from "@mui/material";
 import { useAuth } from "../../../../Context/AuthContext/AuthContext";
-import { FormatAlignCenter, KeyboardArrowDown } from "@mui/icons-material";
+import {
+  FormatAlignCenter,
+  KeyboardArrowDown,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import MuiAppBar from "@mui/material/AppBar";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +38,9 @@ import { AppBarProps } from "../../../../Interfaces/interFaces";
 import logoDark from "../../../../assets/images/logo-dark.svg";
 import logoLight from "../../../../assets/images/logo-light.svg";
 import defaultAvatar from "../../../../assets/images/profile.png";
+import axios from "axios";
+import { getBaseUrl } from "../../../../Utils/Utils";
+import { toast } from "react-toastify";
 
 export default function Navbar({
   setTheme,
@@ -32,7 +48,7 @@ export default function Navbar({
   open,
   window,
 }: AppBarProps) {
-  const { loginData, logOut, currentUser } = useAuth();
+  const { loginData, logOut, currentUser, requestHeaders } = useAuth();
   const navigate = useNavigate();
   const [profileMenu, setProfileMenu] = useState(false);
   const [isDark, setIsDark] = useState(() => {
@@ -40,6 +56,42 @@ export default function Navbar({
     if (value === "dark" || value === null) return true;
     return false;
   });
+
+  // Change password modal state
+  const [changePassOpen, setChangePassOpen] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showOldPass, setShowOldPass] = useState(false);
+  const [showNewPass, setShowNewPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const [changingPass, setChangingPass] = useState(false);
+
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      toast.error("New password and confirm password do not match");
+      return;
+    }
+    setChangingPass(true);
+    try {
+      const res = await axios.post(
+        `${getBaseUrl()}/api/v0/admin/users/change-password`,
+        { oldPassword, newPassword, confirmPassword },
+        { headers: requestHeaders }
+      );
+      toast.success(res.data.message || "Password changed successfully");
+      setChangePassOpen(false);
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message || "Failed to change password");
+      }
+    }
+    setChangingPass(false);
+  };
+
   const navBtns = (
     <Box
       display={"flex"}
@@ -86,13 +138,16 @@ export default function Navbar({
         <KeyboardArrowDown />
       </Box>
       <Box
-        display={profileMenu ? "block" : "none"}
+        display={profileMenu ? "flex" : "none"}
+        flexDirection="column"
         borderRadius={1}
         boxShadow={3}
         border={"solid 1px #bdbdbd"}
         bgcolor={isDark ? "#272727" : "#fff"}
         position={"absolute"}
         top={"45px"}
+        right={0}
+        minWidth={"190px"}
       >
         <Button
           fullWidth
@@ -103,7 +158,7 @@ export default function Navbar({
           }}
           sx={{
             py: 1,
-            px: 4,
+            px: 2,
             "&:hover": {
               backgroundColor: isDark ? "#121212" : "#e0e0e0",
             },
@@ -111,6 +166,24 @@ export default function Navbar({
           }}
         >
           Profile
+        </Button>
+        <Button
+          fullWidth
+          color="inherit"
+          onClick={() => {
+            setChangePassOpen(true);
+            setProfileMenu(false);
+          }}
+          sx={{
+            py: 1,
+            px: 2,
+            "&:hover": {
+              backgroundColor: isDark ? "#121212" : "#e0e0e0",
+            },
+            transition: "all .5s",
+          }}
+        >
+          Change Password
         </Button>
         <Button
           onClick={() => {
@@ -122,7 +195,7 @@ export default function Navbar({
           color="inherit"
           sx={{
             py: 1,
-            px: 4,
+            px: 2,
             "&:hover": {
               backgroundColor: isDark ? "#121212" : "#e0e0e0",
             },
@@ -213,6 +286,11 @@ export default function Navbar({
         duration: theme.transitions.duration.enteringScreen,
       }),
     }),
+    // On mobile, always full width regardless of sidebar state
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      marginLeft: 0,
+    },
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.bgNav.contrastText,
   }));
@@ -221,88 +299,96 @@ export default function Navbar({
     <>
       {loginData?.role === "admin" ? (
         <AppBar position="fixed">
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={() => {
-                setOpen(!open);
-              }}
-              edge="start"
-              sx={{
-                marginRight: 2,
-              }}
-            >
-              <FormatAlignCenter />
-            </IconButton>
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+            {/* Left side: sidebar toggle (hidden on mobile) + logo */}
+            <Box display="flex" alignItems="center">
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => {
+                  setOpen?.(!open);
+                }}
+                edge="start"
+                sx={{
+                  marginRight: 2,
+                  display: { xs: "none", md: "inline-flex" },
+                }}
+              >
+                <FormatAlignCenter />
+              </IconButton>
 
-            <Typography
-              display={"flex"}
-              alignItems={"center"}
-              sx={{ flexGrow: 1, cursor: "pointer" }}
-              variant="h6"
-              noWrap
-              component="div"
-              onClick={() => navigate("/dashboard")}
-            >
-              <Box display={"flex"} width={{ xs: "130px", md: "200px" }}>
-                <img
-                  width={"100%"}
-                  src={isDark ? logoDark : logoLight}
-                  alt="logo"
-                />
-              </Box>
-            </Typography>
-            {getProfileMenu}
-            <Typography ml={3} mt={1} display={"flex"} alignItems={"center"}>
-              <label id="theme-toggle-button">
-                <input
-                  type="checkbox"
-                  onChange={() => {
-                    localStorage.setItem(
-                      "theme",
-                      theme.palette.mode === "dark" ? "light" : "dark"
-                    );
-                    setIsDark(!isDark);
-                    setTheme(theme.palette.mode === "light" ? "dark" : "light");
-                  }}
-                  // defaultChecked
-                  checked={isDark}
-                  id="toggle"
-                />
-                <svg
-                  width={75}
-                  viewBox="0 0 69.667 44"
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g
-                    transform="translate(3.5 3.5)"
-                    data-name="Component 15 – 1"
-                    id="Component_15_1"
+              <Typography
+                display={"flex"}
+                alignItems={"center"}
+                sx={{ cursor: "pointer" }}
+                variant="h6"
+                noWrap
+                component="div"
+                onClick={() => navigate("/dashboard")}
+              >
+                <Box display={"flex"} width={{ xs: "120px", md: "200px" }}>
+                  <img
+                    width={"100%"}
+                    src={isDark ? logoDark : logoLight}
+                    alt="logo"
+                  />
+                </Box>
+              </Typography>
+            </Box>
+
+            {/* Right side: profile menu + theme toggle */}
+            <Box display="flex" alignItems="center">
+              {getProfileMenu}
+              <Typography ml={{ xs: 1, md: 3 }} mt={1} display={"flex"} alignItems={"center"}>
+                <label id="theme-toggle-button">
+                  <input
+                    type="checkbox"
+                    onChange={() => {
+                      localStorage.setItem(
+                        "theme",
+                        theme.palette.mode === "dark" ? "light" : "dark"
+                      );
+                      setIsDark(!isDark);
+                      setTheme?.(theme.palette.mode === "light" ? "dark" : "light");
+                    }}
+                    // defaultChecked
+                    checked={isDark}
+                    id="toggle"
+                  />
+                  <svg
+                    width={75}
+                    viewBox="0 0 69.667 44"
+                    xmlnsXlink="http://www.w3.org/1999/xlink"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <g
-                      filter="url(#container)"
-                      transform="matrix(1, 0, 0, 1, -3.5, -3.5)"
+                      transform="translate(3.5 3.5)"
+                      data-name="Component 15 – 1"
+                      id="Component_15_1"
                     >
-                      <rect
-                        fill="#83cbd8"
-                        transform="translate(3.5 3.5)"
-                        rx="17.5"
-                        height={35}
-                        width="60.667"
-                        data-name="container"
-                        id="container"
-                      />
+                      <g
+                        filter="url(#container)"
+                        transform="matrix(1, 0, 0, 1, -3.5, -3.5)"
+                      >
+                        <rect
+                          fill="#83cbd8"
+                          transform="translate(3.5 3.5)"
+                          rx="17.5"
+                          height={35}
+                          width="60.667"
+                          data-name="container"
+                          id="container"
+                        />
+                      </g>
+                      <g transform="translate(2.333 2.333)" id="button">
+                        {isDark ? moon() : sun()}
+                      </g>
+                      {isDark ? stars() : cloud()}
                     </g>
-                    <g transform="translate(2.333 2.333)" id="button">
-                      {isDark ? moon() : sun()}
-                    </g>
-                    {isDark ? stars() : cloud()}
-                  </g>
-                </svg>
-              </label>
-            </Typography>
+                  </svg>
+                </label>
+              </Typography>
+            </Box>
           </Toolbar>
         </AppBar>
       ) : (
@@ -366,7 +452,7 @@ export default function Navbar({
                           theme.palette.mode === "dark" ? "light" : "dark"
                         );
                         setIsDark(!isDark);
-                        setTheme(
+                        setTheme?.(
                           theme.palette.mode === "light" ? "dark" : "light"
                         );
                       }}
@@ -434,6 +520,92 @@ export default function Navbar({
       ) : (
         ""
       )}
+
+      {/* Change Password Modal */}
+      <Dialog
+        open={changePassOpen}
+        onClose={() => setChangePassOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle
+          sx={{ fontWeight: "bold", color: "#152C5B", fontSize: "1.4rem" }}
+        >
+          Change Password
+        </DialogTitle>
+        <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, pt: "16px !important" }}>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel>Old Password</InputLabel>
+            <OutlinedInput
+              type={showOldPass ? "text" : "password"}
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowOldPass(!showOldPass)} edge="end">
+                    {showOldPass ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Old Password"
+            />
+          </FormControl>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel>New Password</InputLabel>
+            <OutlinedInput
+              type={showNewPass ? "text" : "password"}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowNewPass(!showNewPass)} edge="end">
+                    {showNewPass ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="New Password"
+            />
+          </FormControl>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel>Confirm Password</InputLabel>
+            <OutlinedInput
+              type={showConfirmPass ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowConfirmPass(!showConfirmPass)} edge="end">
+                    {showConfirmPass ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Confirm Password"
+              disabled
+            />
+          </FormControl>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={() => {
+              setChangePassOpen(false);
+              setOldPassword("");
+              setNewPassword("");
+              setConfirmPassword("");
+            }}
+            color="inherit"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleChangePassword}
+            variant="contained"
+            color="primary"
+            disabled={changingPass || !oldPassword || !newPassword || !confirmPassword}
+          >
+            {changingPass ? <CircularProgress size={22} color="inherit" /> : "Change"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

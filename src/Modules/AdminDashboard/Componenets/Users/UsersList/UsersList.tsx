@@ -98,10 +98,10 @@ export default function UsersList() {
   ];
 
   const options = {
-    selectableRows: "none",
+    selectableRows: "none" as const,
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 30, users.length],
-    responsive: "vertical",
+    responsive: "standard" as const,
     download: false,
     print: false,
   };
@@ -165,7 +165,29 @@ export default function UsersList() {
         </Box>
         {/*Rendering The data table */}
         <CacheProvider value={muiCache}>
-          <Box width="90%" mx="auto" my={8}>
+          <Box
+            sx={{
+              width: { xs: "calc(100% - 16px)", sm: "90%" },
+              mx: "auto",
+              my: 8,
+              "& .MuiPaper-root": {
+                boxShadow: 2,
+                borderRadius: 2,
+                overflow: "hidden",
+              },
+              "& .MuiTableContainer-root": {
+                overflowX: "auto",
+              },
+              "& table": {
+                minWidth: { xs: "600px", md: "auto" },
+              },
+              "& td, & th": {
+                whiteSpace: "nowrap",
+                fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                px: { xs: 1, sm: 2 },
+              },
+            }}
+          >
             <MUIDataTable
               title={"Users List"}
               data={users}
@@ -191,7 +213,7 @@ export default function UsersList() {
         }}
       >
         <Fade in={open}>
-          <Box sx={style}>
+          <Box sx={style} width={{ xs: "90%", md: "40%" }} maxHeight="80vh !important" overflow="auto">
             <Box display="flex" justifyContent="space-between">
               <Typography
                 id="transition-modal-title"
@@ -222,27 +244,27 @@ export default function UsersList() {
                   }}
                 />
               </Box>
-              <Stack direction="column" spacing={2} sx={{ padding: "15px" }}>
+              <Stack direction="column" spacing={2} sx={{ p: 0, m: 0 }}>
                 <Box display="flex" justifyContent="start" alignItems="center">
-                  <Typography> User Name : </Typography>
+                  <Typography>User Name:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
                     {viewedUser.userName}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
-                  <Typography> Email : </Typography>
+                  <Typography>Email:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
                     {viewedUser.email}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
-                  <Typography> Country : </Typography>
+                  <Typography>Country:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
                     {viewedUser.country}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
-                  <Typography> Phone Number : </Typography>
+                  <Typography>Phone Number:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
                     {viewedUser.phoneNumber}
                   </Typography>

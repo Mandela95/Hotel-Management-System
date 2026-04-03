@@ -46,6 +46,7 @@ export default function DashboardHome() {
       justifyContent="flex-start"
       gap={12}
       marginTop={8}
+      sx={{ overflow: "hidden", px: { xs: 1, md: 2 } }}
     >
       <Stack
         gap="20px"
@@ -176,82 +177,125 @@ export default function DashboardHome() {
       </Stack>
       {/*Charts */}
       <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-around"
-        flexWrap="wrap"
+        direction={{ xs: "column", md: "row" }}
+        alignItems={{ xs: "center", md: "stretch" }}
+        justifyContent="center"
         marginTop="20px"
         display="flex"
+        gap={4}
+        sx={{
+          width: "100%",
+          px: { xs: 1, md: 0 },
+        }}
       >
+        {/* Bookings Status */}
         <Box
           sx={{
-            width: {
-              xs: "350px !important",
-              md: "400px !important",
-            },
-            height: {
-              md: "100%",
-            },
+            flex: { md: "1 1 0" },
+            maxWidth: { md: "420px" },
+            width: { xs: "100%", sm: "320px" },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <Typography
-            marginBottom={8}
+            marginBottom={2}
             bgcolor="rgba(26, 27, 30, 1)"
-            width="fit-content"
             padding={1}
             borderRadius={2}
             color="white"
           >
             Bookings Status
           </Typography>
-          <PieChart
-            series={[
-              {
-                data: [
-                  {
-                    id: 0,
-                    value: chartsData.bookings?.completed,
-                    label: "Completed",
-                  },
-                  {
-                    id: 1,
-                    value: chartsData.bookings?.pending,
-                    label: "Pending",
-                  },
-                ],
-              },
-            ]}
-            height={200}
-          />
+          {/* Legend above chart */}
+          <Stack direction="row" justifyContent="center" gap={3} mb={2}>
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <Box sx={{ width: 14, height: 14, borderRadius: "50%", bgcolor: "#2196f3" }} />
+              <Typography variant="body2">
+                Completed: {chartsData.bookings?.completed ?? 0}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <Box sx={{ width: 14, height: 14, borderRadius: "50%", bgcolor: "#ff9800" }} />
+              <Typography variant="body2">
+                Pending: {chartsData.bookings?.pending ?? 0}
+              </Typography>
+            </Box>
+          </Stack>
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+            <PieChart
+              series={[
+                {
+                  data: [
+                    {
+                      id: 0,
+                      value: chartsData.bookings?.completed,
+                      label: "Completed",
+                    },
+                    {
+                      id: 1,
+                      value: chartsData.bookings?.pending,
+                      label: "Pending",
+                    },
+                  ],
+                  cx: 150,
+                  cy: 120,
+                },
+              ]}
+              slotProps={{ legend: { hidden: true } }}
+              height={250}
+              width={300}
+            />
+          </Box>
         </Box>
+
+        {/* Users Status */}
         <Box
           sx={{
-            width: {
-              xs: "350px !important",
-              md: "400px !important",
-            },
-            height: {
-              md: "100%",
-            },
+            flex: { md: "1 1 0" },
+            maxWidth: { md: "420px" },
+            width: { xs: "100%", sm: "320px" },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <Typography
-            marginBottom={4}
+            marginBottom={2}
             bgcolor="rgba(26, 27, 30, 1)"
-            width="fit-content"
             padding={1}
             borderRadius={2}
             color="white"
           >
-            Uers Status
+            Users Status
           </Typography>
-          <BarChart
-            height={300}
-            series={[
-              { data: [chartsData.users?.admin], label: "Admin", id: "1" },
-              { data: [chartsData.users?.user], label: "User", id: "2" },
-            ]}
-          />
+          {/* Legend above chart to align with Bookings legend */}
+          <Stack direction="row" justifyContent="center" gap={3} mb={2}>
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <Box sx={{ width: 14, height: 14, borderRadius: 0.5, bgcolor: "#2e7d32" }} />
+              <Typography variant="body2">
+                Admin: {chartsData.users?.admin ?? 0}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap={0.5}>
+              <Box sx={{ width: 14, height: 14, borderRadius: 0.5, bgcolor: "#1976d2" }} />
+              <Typography variant="body2">
+                User: {chartsData.users?.user ?? 0}
+              </Typography>
+            </Box>
+          </Stack>
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+            <BarChart
+              height={250}
+              width={300}
+              series={[
+                { data: [chartsData.users?.admin], label: "Admin", id: "1" },
+                { data: [chartsData.users?.user], label: "User", id: "2" },
+              ]}
+              slotProps={{ legend: { hidden: true } }}
+            />
+          </Box>
         </Box>
       </Stack>
     </Stack>

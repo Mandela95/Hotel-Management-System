@@ -33,8 +33,8 @@ export interface ResetPassInterFace {
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 export interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
-  setTheme: React.Dispatch<React.SetStateAction<string>>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setTheme?: React.Dispatch<React.SetStateAction<string>>;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   window?: () => Window;
 }
 

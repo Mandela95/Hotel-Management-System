@@ -45,7 +45,7 @@ export default function Signin() {
     onClose: () => setIsClicked(false),
   };
 
-  const navigateTolayout = (userInfo: string) => {
+  const navigateToLayout = (userInfo: string) => {
     userInfo === "admin" ? navigate("/dashboard") : navigate("/");
   };
 
@@ -66,7 +66,7 @@ export default function Signin() {
       localStorage.setItem("token", res.data.data.token);
       setSpinner(false);
       toast.success(res.data.message, signUpWaitToast);
-      navigateTolayout(res.data.data.user.role);
+      navigateToLayout(res.data.data.user.role);
       savLoginData(res.data.data.user);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -157,7 +157,7 @@ export default function Signin() {
                   <Controller
                     name="email"
                     control={control}
-                    defaultValue=""
+                    defaultValue="mohamedelseady247@gmail.com"
                     rules={emailValidation}
                     render={({ field }) => (
                       <TextField
@@ -180,7 +180,7 @@ export default function Signin() {
                   <Controller
                     name="password"
                     control={control}
-                    defaultValue=""
+                    defaultValue="Test@123"
                     rules={passwordValidation}
                     render={({ field }) => (
                       <FormControl

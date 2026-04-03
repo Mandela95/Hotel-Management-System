@@ -75,7 +75,7 @@ export default function Profile() {
         sx={{ marginTop: { xs: "20px", sm: "0" } }}
       >
         <Breadcrumbs aria-label="breadcrumb" sx={{ marginLeft: "20px" }}>
-          <Link underline="hover" color="inherit" href="/dashboard">
+          <Link underline="hover" color="inherit" href="/Hotel-Management-System/dashboard">
             Home
           </Link>
           <Typography color="text.primary">Profile</Typography>
