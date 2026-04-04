@@ -31,6 +31,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../../../Context/AuthContext/AuthContext";
 import { BookingsInterface } from "../../../../Interfaces/interFaces";
 import { getBaseUrl } from "../../../../Utils/Utils";
+import { useTranslation } from "react-i18next";
 
 const muiCache = createCache({
   key: "mui-datatables",
@@ -38,6 +39,7 @@ const muiCache = createCache({
 });
 
 export default function BookingsList() {
+  const { t } = useTranslation();
   const [bookings, setBookings] = useState<BookingsInterface[]>([]);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -81,42 +83,42 @@ export default function BookingsList() {
 
   const columns = [
     {
-      label: "Room Number",
+      label: t("bookingsTable.roomNumber"),
       name: "roomNumber",
       options: {
         customBodyRender: (value: string) => value,
       },
     },
     {
-      label: "Price",
+      label: t("bookingsTable.price"),
       name: "totalPrice",
       options: {
         customBodyRender: (value: number) => value,
       },
     },
     {
-      label: "Start Date",
+      label: t("bookingsTable.startDate"),
       name: "startDate",
       options: {
         customBodyRender: (value: string) => value,
       },
     },
     {
-      label: "End Date",
+      label: t("bookingsTable.endDate"),
       name: "endDate",
       options: {
         customBodyRender: (value: string) => value,
       },
     },
     {
-      label: "User",
+      label: t("bookingsTable.user"),
       name: "userName",
       options: {
         customBodyRender: (value: string) => value,
       },
     },
     {
-      label: "Action",
+      label: t("bookingsTable.action"),
       name: "datauser",
       options: {
         filter: false,
@@ -199,9 +201,9 @@ export default function BookingsList() {
               md={6}
             >
               <Typography variant="h5" fontWeight="500">
-                Booking Table Details
+                {t("bookingsTable.title")}
                 <Typography variant="body1">
-                  You can check all details
+                  {t("bookingsTable.subtitle")}
                 </Typography>
               </Typography>
             </Grid>
@@ -210,7 +212,7 @@ export default function BookingsList() {
         <CacheProvider value={muiCache}>
           <Box width="90%" mx="auto" my={8}>
             <MUIDataTable
-              title={"Booking List"}
+              title={t("bookingsTable.listTitle")}
               data={bookings}
               columns={columns}
               options={options}
@@ -240,7 +242,7 @@ export default function BookingsList() {
                 variant="h6"
                 component="h2"
               >
-                Booking Details
+                {t("bookingsTable.bookingDetails")}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -256,7 +258,7 @@ export default function BookingsList() {
                 >
                   <TableBody>
                     <TableRow>
-                      <TableCell>User</TableCell>
+                      <TableCell>{t("bookingsTable.user")}</TableCell>
                       <TableCell align="left">
                         {viewedUser?.user?.userName}
                         <Tooltip title={viewedUser?.user?._id} placement="top">
@@ -267,23 +269,23 @@ export default function BookingsList() {
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Room Number</TableCell>
+                      <TableCell>{t("bookingsTable.roomNumber")}</TableCell>
                       <TableCell align="left">
                         {viewedUser?.room?.roomNumber}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Price</TableCell>
+                      <TableCell>{t("bookingsTable.price")}</TableCell>
                       <TableCell align="left">
                         {viewedUser.totalPrice}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Start Date</TableCell>
+                      <TableCell>{t("bookingsTable.startDate")}</TableCell>
                       <TableCell align="left">{viewedUser.startDate}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>End Date</TableCell>
+                      <TableCell>{t("bookingsTable.endDate")}</TableCell>
                       <TableCell align="left">{viewedUser.endDate}</TableCell>
                     </TableRow>
                   </TableBody>
@@ -315,17 +317,7 @@ export default function BookingsList() {
                 variant="h6"
                 component="h2"
               >
-                Will you Delete
-                <span
-                  style={{
-                    color: "#c62828",
-                    margin: "0 5px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {deletedBook.user?.userName} 's
-                </span>
-                Book ? 😢
+                {t("bookingsTable.deleteBooking", { name: deletedBook.user?.userName })}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -338,8 +330,7 @@ export default function BookingsList() {
                 <img src={delImg} alt="" />
               </Box>
               <Typography variant="caption">
-                are you sure you want to delete this item ? if you are sure just
-                click on delete it
+                {t("common.deleteConfirm")}
               </Typography>
             </Box>
             <Button
@@ -351,7 +342,7 @@ export default function BookingsList() {
               variant="contained"
               color="error"
             >
-              Delete
+              {t("common.delete")}
             </Button>
           </Box>
         </Fade>

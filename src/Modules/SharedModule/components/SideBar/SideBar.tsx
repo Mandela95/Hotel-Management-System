@@ -27,12 +27,14 @@ import {
 import MuiDrawer from "@mui/material/Drawer";
 import { SideBarProps } from "../../../../Interfaces/interFaces";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function SideBar({ open }: SideBarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const { t } = useTranslation();
 
   const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
@@ -60,32 +62,32 @@ export default function SideBar({ open }: SideBarProps) {
 
   const sidebarList = [
     {
-      title: "Home",
+      title: t("sidebar.home"),
       icon: <Home />,
       path: "/dashboard",
     },
     {
-      title: "Users",
+      title: t("sidebar.users"),
       icon: <Group />,
       path: "/dashboard/users",
     },
     {
-      title: "Rooms",
+      title: t("sidebar.rooms"),
       icon: <Villa />,
       path: "/dashboard/rooms",
     },
     {
-      title: "Ads",
+      title: t("sidebar.ads"),
       icon: <Business />,
       path: "/dashboard/ads",
     },
     {
-      title: "Bookings",
+      title: t("sidebar.bookings"),
       icon: <BookmarkAdded />,
       path: "/dashboard/bookings",
     },
     {
-      title: "Facilities",
+      title: t("sidebar.facilities"),
       icon: <SettingsSuggest />,
       path: "/dashboard/facilities",
     },

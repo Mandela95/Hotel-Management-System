@@ -20,6 +20,7 @@ import {
   ListItemText,
   OutlinedInput,
   Toolbar,
+  Tooltip,
   Typography,
   styled,
   useTheme,
@@ -28,12 +29,14 @@ import { useAuth } from "../../../../Context/AuthContext/AuthContext";
 import {
   FormatAlignCenter,
   KeyboardArrowDown,
+  Language,
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
 import MuiAppBar from "@mui/material/AppBar";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { AppBarProps } from "../../../../Interfaces/interFaces";
 import logoDark from "../../../../assets/images/logo-dark.svg";
 import logoLight from "../../../../assets/images/logo-light.svg";
@@ -50,7 +53,29 @@ export default function Navbar({
 }: AppBarProps) {
   const { loginData, logOut, currentUser, requestHeaders } = useAuth();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [profileMenu, setProfileMenu] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
+        setProfileMenu(false);
+      }
+    };
+
+    if (profileMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [profileMenu]);
   const [isDark, setIsDark] = useState(() => {
     const value = localStorage.getItem("theme");
     if (value === "dark" || value === null) return true;
@@ -69,7 +94,7 @@ export default function Navbar({
 
   const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
-      toast.error("New password and confirm password do not match");
+      toast.error(t("changePassword.mismatch"));
       return;
     }
     setChangingPass(true);
@@ -79,18 +104,35 @@ export default function Navbar({
         { oldPassword, newPassword, confirmPassword },
         { headers: requestHeaders }
       );
-      toast.success(res.data.message || "Password changed successfully");
+      toast.success(res.data.message || t("changePassword.success"));
       setChangePassOpen(false);
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message || "Failed to change password");
+        toast.error(error.response.data.message || t("changePassword.fail"));
       }
     }
     setChangingPass(false);
   };
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "ar" ? "en" : "ar";
+    i18n.changeLanguage(newLang);
+  };
+
+  const languageToggleBtn = (
+    <Tooltip title={t("common.language")}>
+      <IconButton
+        color="inherit"
+        onClick={toggleLanguage}
+        sx={{ ml: 1 }}
+      >
+        <Language />
+      </IconButton>
+    </Tooltip>
+  );
 
   const navBtns = (
     <Box
@@ -105,19 +147,19 @@ export default function Navbar({
         variant="contained"
         disableElevation
       >
-        Register
+        {t("navbar.register")}
       </Button>
       <Button
         onClick={() => navigate("/auth")}
         variant="contained"
         disableElevation
       >
-        Login Now
+        {t("navbar.login")}
       </Button>
     </Box>
   );
   const getProfileMenu = (
-    <Box ml={2} position={"relative"}>
+    <Box ml={2} position={"relative"} ref={profileMenuRef}>
       <Box
         onClick={() => {
           setProfileMenu(!profileMenu);
@@ -165,7 +207,7 @@ export default function Navbar({
             transition: "all .5s",
           }}
         >
-          Profile
+          {t("navbar.profile")}
         </Button>
         <Button
           fullWidth
@@ -183,7 +225,7 @@ export default function Navbar({
             transition: "all .5s",
           }}
         >
-          Change Password
+          {t("navbar.changePassword")}
         </Button>
         <Button
           onClick={() => {
@@ -202,7 +244,7 @@ export default function Navbar({
             transition: "all .5s",
           }}
         >
-          Logout
+          {t("navbar.logout")}
         </Button>
       </Box>
     </Box>
@@ -211,16 +253,16 @@ export default function Navbar({
   const navItems =
     loginData?.role === "user"
       ? [
-          { title: "Home", path: "/" },
-          { title: "Explore", path: "/explore" },
-          { title: "Reviews", path: "/reviews" },
-          { title: "Favorites", path: "/favorites" },
+          { title: t("navbar.home"), path: "/" },
+          { title: t("navbar.explore"), path: "/explore" },
+          { title: t("navbar.reviews"), path: "/reviews" },
+          { title: t("navbar.favorites"), path: "/favorites" },
           { component: getProfileMenu },
         ]
       : loginData === null
       ? [
-          { title: "Home", path: "/" },
-          { title: "Explore", path: "/explore" },
+          { title: t("navbar.home"), path: "/" },
+          { title: t("navbar.explore"), path: "/explore" },
           { component: navBtns },
         ]
       : [];
@@ -326,7 +368,7 @@ export default function Navbar({
                 component="div"
                 onClick={() => navigate("/dashboard")}
               >
-                <Box display={"flex"} width={{ xs: "120px", md: "200px" }}>
+                <Box display={"flex"} width={{ xs: "80px", md: "150px" }}>
                   <img
                     width={"100%"}
                     src={isDark ? logoDark : logoLight}
@@ -336,9 +378,10 @@ export default function Navbar({
               </Typography>
             </Box>
 
-            {/* Right side: profile menu + theme toggle */}
+            {/* Right side: profile menu + language toggle + theme toggle */}
             <Box display="flex" alignItems="center">
               {getProfileMenu}
+              {languageToggleBtn}
               <Typography ml={{ xs: 1, md: 3 }} mt={1} display={"flex"} alignItems={"center"}>
                 <label id="theme-toggle-button">
                   <input
@@ -493,6 +536,7 @@ export default function Navbar({
                     </svg>
                   </label>
                 </Typography>
+                {languageToggleBtn}
               </Box>
             </Toolbar>
           </AppBar>
@@ -531,11 +575,11 @@ export default function Navbar({
         <DialogTitle
           sx={{ fontWeight: "bold", color: "#152C5B", fontSize: "1.4rem" }}
         >
-          Change Password
+          {t("changePassword.title")}
         </DialogTitle>
         <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, pt: "16px !important" }}>
           <FormControl fullWidth variant="outlined">
-            <InputLabel>Old Password</InputLabel>
+            <InputLabel>{t("changePassword.oldPassword")}</InputLabel>
             <OutlinedInput
               type={showOldPass ? "text" : "password"}
               value={oldPassword}
@@ -547,11 +591,11 @@ export default function Navbar({
                   </IconButton>
                 </InputAdornment>
               }
-              label="Old Password"
+              label={t("changePassword.oldPassword")}
             />
           </FormControl>
           <FormControl fullWidth variant="outlined">
-            <InputLabel>New Password</InputLabel>
+            <InputLabel>{t("changePassword.newPassword")}</InputLabel>
             <OutlinedInput
               type={showNewPass ? "text" : "password"}
               value={newPassword}
@@ -563,11 +607,11 @@ export default function Navbar({
                   </IconButton>
                 </InputAdornment>
               }
-              label="New Password"
+              label={t("changePassword.newPassword")}
             />
           </FormControl>
           <FormControl fullWidth variant="outlined">
-            <InputLabel>Confirm Password</InputLabel>
+            <InputLabel>{t("changePassword.confirmPassword")}</InputLabel>
             <OutlinedInput
               type={showConfirmPass ? "text" : "password"}
               value={confirmPassword}
@@ -579,7 +623,7 @@ export default function Navbar({
                   </IconButton>
                 </InputAdornment>
               }
-              label="Confirm Password"
+              label={t("changePassword.confirmPassword")}
               disabled
             />
           </FormControl>
@@ -594,7 +638,7 @@ export default function Navbar({
             }}
             color="inherit"
           >
-            Cancel
+            {t("changePassword.cancel")}
           </Button>
           <Button
             onClick={handleChangePassword}
@@ -602,7 +646,7 @@ export default function Navbar({
             color="primary"
             disabled={changingPass || !oldPassword || !newPassword || !confirmPassword}
           >
-            {changingPass ? <CircularProgress size={22} color="inherit" /> : "Change"}
+            {changingPass ? <CircularProgress size={22} color="inherit" /> : t("changePassword.change")}
           </Button>
         </DialogActions>
       </Dialog>

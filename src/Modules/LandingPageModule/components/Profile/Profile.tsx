@@ -16,22 +16,18 @@ import {
 import {
   Email,
   Phone,
-  Public,
-  CalendarMonth,
-  VerifiedUser,
   Person,
 } from "@mui/icons-material";
 import { useAuth } from "../../../../Context/AuthContext/AuthContext";
 import defaultAvatar from "../../../../assets/images/profile.png";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Profile() {
   const { currentUser } = useAuth();
   const theme = useTheme();
   const navigate = useNavigate();
-  console.log('====================================');
-  console.log('currentUser', currentUser);
-  console.log('====================================');
+  const { t } = useTranslation();
 
   if (!currentUser) {
     return (
@@ -44,26 +40,18 @@ export default function Profile() {
         gap={2}
       >
         <Typography variant="h5" fontWeight="bold" color="text.secondary">
-          Please log in to view your profile
+          {t("profile.pleaseLogin")}
         </Typography>
         <Button
           variant="contained"
           onClick={() => navigate("/auth")}
         >
-          Login Now
+          {t("navbar.login")}
         </Button>
       </Box>
     );
   }
 
-  const formattedDate = new Date(currentUser.createdAt).toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }
-  );
 
   return (
     <Box sx={{ padding: { xs: 2, md: 4 }, marginTop: "40px" }}>
@@ -76,9 +64,9 @@ export default function Profile() {
       >
         <Breadcrumbs aria-label="breadcrumb" sx={{ marginLeft: "20px" }}>
           <Link underline="hover" color="inherit" href="/Hotel-Management-System/dashboard">
-            Home
+            {t("navbar.home")}
           </Link>
-          <Typography color="text.primary">Profile</Typography>
+          <Typography color="text.primary">{t("navbar.profile")}</Typography>
         </Breadcrumbs>
       </Stack>
 
@@ -157,7 +145,7 @@ export default function Profile() {
                 color="text.primary"
                 gutterBottom
               >
-                Personal Information
+                {t("profile.personalInfo")}
               </Typography>
               <Divider sx={{ mb: 3 }} />
 
@@ -183,7 +171,7 @@ export default function Profile() {
                         color="text.secondary"
                         fontWeight="bold"
                       >
-                        Username
+                        {t("usersTable.userName")}
                       </Typography>
                       <Typography variant="body1" fontWeight="500">
                         {currentUser.userName || "Not provided"}
@@ -213,7 +201,7 @@ export default function Profile() {
                         color="text.secondary"
                         fontWeight="bold"
                       >
-                        Role
+                        {t("profile.role")}
                       </Typography>
                       <Typography variant="body1" fontWeight="500">
                         {currentUser.role || "Not provided"}

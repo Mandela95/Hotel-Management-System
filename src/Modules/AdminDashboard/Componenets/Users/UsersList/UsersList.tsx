@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../../../../Context/AuthContext/AuthContext";
 import { UsersInterface } from "../../../../../Interfaces/interFaces";
 import { getBaseUrl } from "../../../../../Utils/Utils";
+import { useTranslation } from "react-i18next";
 
 const muiCache = createCache({
   key: "mui-datatables",
@@ -28,8 +29,8 @@ export default function UsersList() {
   const [open, setOpen] = useState(false);
   const [maxSize, setMaxSize] = useState<number>(10);
   const [viewedUser, setViewedUser] = useState<UsersInterface>({});
-
   const { requestHeaders } = useAuth();
+  const { t } = useTranslation();
 
   const handleOpen = () => setOpen(true);
 
@@ -44,35 +45,35 @@ export default function UsersList() {
 
   const columns = [
     {
-      label: "User Name",
+      label: t("usersTable.userName"),
       name: "userName",
       options: {
         customBodyRender: (value: string) => value,
       },
     },
     {
-      label: "Email",
+      label: t("usersTable.email"),
       name: "email",
       options: {
         customBodyRender: (value: string) => value,
       },
     },
     {
-      label: "Phone Number",
+      label: t("usersTable.phoneNumber"),
       name: "phoneNumber",
       options: {
         customBodyRender: (value: string) => value,
       },
     },
     {
-      label: "Country",
+      label: t("usersTable.country"),
       name: "country",
       options: {
         customBodyRender: (value: string) => value,
       },
     },
     {
-      label: "Profile Image",
+      label: t("usersTable.profileImage"),
       name: "profileImage",
       options: {
         customBodyRender: (value: string) => (
@@ -82,7 +83,7 @@ export default function UsersList() {
     },
     {
       name: "datauser",
-      label: "Action",
+      label: t("usersTable.action"),
       options: {
         filter: false,
         customBodyRender: (value: UsersInterface) => (
@@ -155,9 +156,9 @@ export default function UsersList() {
               md={6}
             >
               <Typography variant="h5" fontWeight="500">
-                Users Table Details
+                {t("usersTable.title")}
                 <Typography variant="body1">
-                  You can check all details
+                  {t("usersTable.subtitle")}
                 </Typography>
               </Typography>
             </Grid>
@@ -189,7 +190,7 @@ export default function UsersList() {
             }}
           >
             <MUIDataTable
-              title={"Users List"}
+              title={t("usersTable.listTitle")}
               data={users}
               columns={columns}
               options={options}
@@ -220,7 +221,7 @@ export default function UsersList() {
                 variant="h6"
                 component="h2"
               >
-                User Details
+                {t("usersTable.userDetails")}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -246,25 +247,25 @@ export default function UsersList() {
               </Box>
               <Stack direction="column" spacing={2} sx={{ p: 0, m: 0 }}>
                 <Box display="flex" justifyContent="start" alignItems="center">
-                  <Typography>User Name:</Typography>
+                  <Typography>{t("usersTable.userName")}:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
                     {viewedUser.userName}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
-                  <Typography>Email:</Typography>
+                  <Typography>{t("usersTable.email")}:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
                     {viewedUser.email}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
-                  <Typography>Country:</Typography>
+                  <Typography>{t("usersTable.country")}:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
                     {viewedUser.country}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
-                  <Typography>Phone Number:</Typography>
+                  <Typography>{t("usersTable.phoneNumber")}:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
                     {viewedUser.phoneNumber}
                   </Typography>

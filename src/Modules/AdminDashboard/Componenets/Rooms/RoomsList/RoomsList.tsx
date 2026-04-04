@@ -40,6 +40,7 @@ import delImg from "../../../../../assets/images/noData.png";
 import { useAuth } from "../../../../../Context/AuthContext/AuthContext";
 import { RoomsInterface } from "../../../../../Interfaces/interFaces";
 import { getBaseUrl } from "../../../../../Utils/Utils";
+import { useTranslation } from "react-i18next";
 
 const muiCache = createCache({
   key: "mui-datatables",
@@ -48,6 +49,7 @@ const muiCache = createCache({
 
 export default function RoomsList() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [rooms, setRooms] = useState<RoomsInterface[]>([]);
   const [facilities, setFacilities] = useState<[{ name: string }]>([
     { name: "" },
@@ -142,15 +144,15 @@ export default function RoomsList() {
   const columns = [
     {
       name: "roomNumber",
-      label: "Room Name",
+      label: t("roomsTable.roomName"),
     },
     {
       name: "images",
-      label: "Images",
+      label: t("roomsTable.images"),
       options: {
         filter: false,
         customBodyRender: (value: string[]) => (
-          <Tooltip title="view images" placement="top">
+          <Tooltip title={t("roomsTable.roomImages")} placement="top">
             <IconButton
               onClick={() => {
                 setImages(value);
@@ -169,7 +171,7 @@ export default function RoomsList() {
     },
     {
       name: "facilities",
-      label: "Facilities",
+      label: t("roomsTable.facilities"),
       options: {
         filter: false,
         customBodyRender: (value: [{ name: string }]) => (
@@ -182,7 +184,7 @@ export default function RoomsList() {
               variant="text"
               color="primary"
             >
-              Facilities
+              {t("roomsTable.facilities")}
             </Button>
           </>
         ),
@@ -190,20 +192,20 @@ export default function RoomsList() {
     },
     {
       name: "price",
-      label: "Price",
+      label: t("roomsTable.price"),
     },
     {
       name: "capacity",
-      label: "Capacity",
+      label: t("roomsTable.capacity"),
     },
     {
       name: "discount",
-      label: "Discount",
+      label: t("roomsTable.discount"),
     },
 
     {
       name: "dataroom",
-      label: "Action",
+      label: t("roomsTable.action"),
       options: {
         filter: false,
         customBodyRender: (value: RoomsInterface) => {
@@ -266,9 +268,9 @@ export default function RoomsList() {
               md={6}
             >
               <Typography variant="h5" fontWeight={"500"}>
-                Rooms Table Details
+                {t("roomsTable.title")}
                 <Typography variant="body1">
-                  You can check all details
+                  {t("roomsTable.subtitle")}
                 </Typography>
               </Typography>
             </Grid>
@@ -291,7 +293,7 @@ export default function RoomsList() {
                 variant="contained"
                 color="info"
               >
-                Add New Room
+                {t("roomsTable.addNewRoom")}
               </Button>
             </Grid>
           </Grid>
@@ -299,7 +301,7 @@ export default function RoomsList() {
         <CacheProvider value={muiCache}>
           <Box width={"90%"} mx={"auto"} my={8}>
             <MUIDataTable
-              title={"Room List"}
+              title={t("roomsTable.listTitle")}
               data={rooms}
               columns={columns}
               options={options}
@@ -329,7 +331,7 @@ export default function RoomsList() {
                 variant="h6"
                 component="h1"
               >
-                Room Facility
+                {t("roomsTable.roomFacility")}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -353,7 +355,7 @@ export default function RoomsList() {
                   </Typography>
                 ))
               ) : (
-                <Typography variant="h5">Not Found Facilities</Typography>
+                <Typography variant="h5">{t("roomsTable.notFoundFacilities")}</Typography>
               )}
             </Box>
           </Box>
@@ -382,7 +384,7 @@ export default function RoomsList() {
                 variant="h6"
                 component="h2"
               >
-                Room Images
+                {t("roomsTable.roomImages")}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -403,7 +405,7 @@ export default function RoomsList() {
                         />
                       </ImageListItem>
                     ))
-                  : "No Images Found"}
+                  : t("common.noImagesFound")}
               </ImageList>
             </Box>
           </Box>
@@ -431,7 +433,7 @@ export default function RoomsList() {
                 variant="h6"
                 component="h2"
               >
-                View Room
+                {t("roomsTable.viewRoom")}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -480,13 +482,13 @@ export default function RoomsList() {
                     <Typography
                       sx={{ display: "flex", alignItems: "center", gap: "3px" }}
                     >
-                      <AddHomeWorkIcon /> Name : {viewRoom.roomNumber}
+                      <AddHomeWorkIcon /> {t("common.name")} : {viewRoom.roomNumber}
                     </Typography>
 
                     <Typography
                       sx={{ display: "flex", alignItems: "center", gap: "3px" }}
                     >
-                      <AttachMoneyIcon /> Price : {viewRoom.price}
+                      <AttachMoneyIcon /> {t("common.price")} : {viewRoom.price}
                     </Typography>
                   </Card>
                 </Grid>
@@ -496,17 +498,17 @@ export default function RoomsList() {
                   variant="h6"
                   sx={{ display: "flex", alignItems: "center", gap: "3px" }}
                 >
-                  <GroupIcon /> Capacity : {viewRoom.capacity}
+                  <GroupIcon /> {t("common.capacity")} : {viewRoom.capacity}
                 </Typography>
                 <Typography
                   variant="h6"
                   sx={{ display: "flex", alignItems: "center", gap: "3px" }}
                 >
-                  <DiscountIcon /> Discount : {viewRoom.discount}
+                  <DiscountIcon /> {t("common.discount")} : {viewRoom.discount}
                 </Typography>
                 <Typography variant="h6">
                   <Shop2Icon sx={{ fontSize: "1em", marginRight: "5px" }} />
-                  Facilities :
+                  {t("roomsTable.facilities")} :
                   {facilities.length > 0 ? (
                     facilities.map((fac) => (
                       <span
@@ -522,7 +524,7 @@ export default function RoomsList() {
                       </span>
                     ))
                   ) : (
-                    <span> Not Found Facilities</span>
+                    <span> {t("roomsTable.notFoundFacilities")}</span>
                   )}
                 </Typography>
 
@@ -530,20 +532,20 @@ export default function RoomsList() {
                   variant="h6"
                   sx={{ display: "flex", alignItems: "center", gap: "3px" }}
                 >
-                  <FaceIcon /> Created By: {viewRoom?.createdBy}
+                  <FaceIcon /> {t("roomsTable.createdBy")}: {viewRoom?.createdBy as unknown as string}
                 </Typography>
                 <Typography
                   variant="h6"
                   sx={{ display: "flex", alignItems: "center", gap: "3px" }}
                 >
-                  <DoneIcon /> Created At :{" "}
+                  <DoneIcon /> {t("roomsTable.createdAt")} :{" "}
                   {moment(viewRoom?.createdAt).format("llll")}
                 </Typography>
                 <Typography
                   variant="h6"
                   sx={{ display: "flex", alignItems: "center", gap: "3px" }}
                 >
-                  <DoneAllIcon /> Updated At :{" "}
+                  <DoneAllIcon /> {t("roomsTable.updatedAt")} :{" "}
                   {moment(viewRoom?.updatedAt).fromNow()}
                 </Typography>
               </Box>
@@ -574,7 +576,7 @@ export default function RoomsList() {
                 variant="h6"
                 component="h2"
               >
-                {`Delete this ${roomName}`}
+                {t("roomsTable.deleteRoom", { name: roomName })}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -585,11 +587,10 @@ export default function RoomsList() {
             <Box py={4} textAlign={"center"}>
               <img src={delImg} alt="" />
               <Typography py={2} variant="body1">
-                {` Delete This ${roomName} ?`}
+                {t("roomsTable.deleteRoom", { name: roomName })}
               </Typography>
               <Typography variant="caption">
-                are you sure you want to delete this item ? if you are sure just
-                click on delete it
+                {t("common.deleteConfirm")}
               </Typography>
             </Box>
             <Button
@@ -598,7 +599,7 @@ export default function RoomsList() {
               variant="contained"
               color="error"
             >
-              Delete
+              {t("common.delete")}
             </Button>
           </Box>
         </Fade>

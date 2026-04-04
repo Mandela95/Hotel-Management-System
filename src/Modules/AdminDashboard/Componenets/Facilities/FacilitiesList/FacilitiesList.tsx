@@ -25,12 +25,14 @@ import { toast } from "react-toastify";
 import delImg from "../../../../../assets/images/noData.png";
 import { getBaseUrl } from "../../../../../Utils/Utils";
 import { useAuth } from "../../../../../Context/AuthContext/AuthContext";
+import { useTranslation } from "react-i18next";
 const muiCache = createCache({
   key: "mui-datatables",
   prepend: true,
 });
 
 export default function FacilitiesList() {
+  const { t } = useTranslation();
   const [facilities, setFacilities] = useState<FacilitiesInterface[]>([]);
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -73,24 +75,24 @@ export default function FacilitiesList() {
   const columns = [
     {
       name: "name",
-      label: "Name",
+      label: t("facilitiesTable.name"),
     },
     {
       name: "createdAt",
-      label: "Created At",
+      label: t("facilitiesTable.createdAt"),
       options: {
         customBodyRender: (value: string) => moment(value).format("ll"),
       },
     },
     {
-      label: "Updated At",
+      label: t("facilitiesTable.updatedAt"),
       name: "updatedAt",
       options: {
         customBodyRender: (value: string) => moment(value).fromNow(),
       },
     },
     {
-      label: "Created By",
+      label: t("facilitiesTable.createdBy"),
       name: "createdBy",
       options: {
         customBodyRender: (value: { userName: string }) => value.userName,
@@ -99,7 +101,7 @@ export default function FacilitiesList() {
     {
       name: "datafac",
 
-      label: "Action",
+      label: t("facilitiesTable.action"),
       options: {
         filter: false,
         customBodyRender: (value: { id: string; name: string }) => {
@@ -238,9 +240,9 @@ export default function FacilitiesList() {
               md={6}
             >
               <Typography variant="h5" fontWeight={"500"}>
-                Facilities Table Details
+                {t("facilitiesTable.title")}
                 <Typography variant="body1">
-                  You can check all details
+                  {t("facilitiesTable.subtitle")}
                 </Typography>
               </Typography>
             </Grid>
@@ -261,7 +263,7 @@ export default function FacilitiesList() {
                 variant="contained"
                 color="info"
               >
-                Add New Facility
+                {t("facilitiesTable.addNewFacility")}
               </Button>
             </Grid>
           </Grid>
@@ -269,7 +271,7 @@ export default function FacilitiesList() {
         <CacheProvider value={muiCache}>
           <Box width={"90%"} mx={"auto"} my={8}>
             <MUIDataTable
-              title={"Facilities List"}
+              title={t("facilitiesTable.listTitle")}
               data={facilities}
               columns={columns}
               options={options}
@@ -300,7 +302,7 @@ export default function FacilitiesList() {
                 variant="h6"
                 component="h2"
               >
-                {isUpdate ? `Update this ${facName}` : " Add Facility"}
+                {isUpdate ? t("facilitiesTable.updateFacility", { name: facName }) : t("facilitiesTable.addFacility")}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -327,7 +329,7 @@ export default function FacilitiesList() {
                     fullWidth
                     type="text"
                     id="filled-error"
-                    label="Name"
+                    label={t("common.name")}
                     sx={{ mt: 3 }}
                     error={!!errors.name}
                     helperText={errors.name ? errors.name?.message : ""}
@@ -349,7 +351,7 @@ export default function FacilitiesList() {
                 {spinner ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (
-                  "Save"
+                  t("common.save")
                 )}
               </Button>
             </Box>
@@ -378,8 +380,7 @@ export default function FacilitiesList() {
                 variant="h6"
                 component="h2"
               >
-                Delete this
-                <span style={{ color: "#c62828" }}> {facName} </span>
+                {t("facilitiesTable.deleteFacility", { name: facName })}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -390,11 +391,10 @@ export default function FacilitiesList() {
             <Box py={4} textAlign={"center"}>
               <img src={delImg} alt="" />
               <Typography py={2} variant="body1">
-                {` Delete This ${facName} ?`}
+                {t("facilitiesTable.deleteFacility", { name: facName })}
               </Typography>
               <Typography variant="caption">
-                are you sure you want to delete this item ? if you are sure just
-                click on delete it
+                {t("common.deleteConfirm")}
               </Typography>
             </Box>
             <Button
@@ -403,7 +403,7 @@ export default function FacilitiesList() {
               variant="contained"
               color="error"
             >
-              Delete
+              {t("common.delete")}
             </Button>
           </Box>
         </Fade>

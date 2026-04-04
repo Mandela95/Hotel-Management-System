@@ -31,6 +31,7 @@ import { toast } from "react-toastify";
 import delImg from "../../../../../assets/images/noData.png";
 import { getBaseUrl } from "../../../../../Utils/Utils";
 import { useAuth } from "../../../../../Context/AuthContext/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const muiCache = createCache({
   key: "mui-datatables",
@@ -38,6 +39,7 @@ const muiCache = createCache({
 });
 
 export default function AdsList() {
+  const { t } = useTranslation();
   const [ads, setAds] = useState<AdsInterface[]>([]);
   const [rooms, setRooms] = useState([]);
   const [open, setOpen] = useState(false);
@@ -100,52 +102,52 @@ export default function AdsList() {
   const columns = [
     {
       name: `roomNumber`,
-      label: "Room Name",
+      label: t("adsTable.roomName"),
       options: {
         customBodyRender: (value: string) => {
-          return value ? value : "nothing";
+          return value ? value : t("common.nothing");
         },
       },
     },
     {
       name: "price",
-      label: "Price",
+      label: t("adsTable.price"),
       options: {
         customBodyRender: (value: string) => {
-          return value ? value : "nothing";
+          return value ? value : t("common.nothing");
         },
       },
     },
     {
       name: "discount",
-      label: "Discount",
+      label: t("adsTable.discount"),
       options: {
         customBodyRender: (value: string) => {
-          return value ? value : "nothing";
+          return value ? value : t("common.nothing");
         },
       },
     },
     {
       name: "capacity",
-      label: "Capacity",
+      label: t("adsTable.capacity"),
       options: {
         customBodyRender: (value: string) => {
-          return value ? value : "nothing";
+          return value ? value : t("common.nothing");
         },
       },
     },
     {
       name: "isActive",
-      label: "Active",
+      label: t("adsTable.active"),
       options: {
         customBodyRender: (value: boolean) => {
-          return value ? "Active" : "Inactive";
+          return value ? t("common.active") : t("common.inactive");
         },
       },
     },
     {
       name: "dataSingleAd",
-      label: "Actions",
+      label: t("adsTable.actions"),
       options: {
         filter: false,
         customBodyRender: (value: AdsInterface) => {
@@ -327,9 +329,9 @@ export default function AdsList() {
               md={6}
             >
               <Typography variant="h5" fontWeight={"500"}>
-                Ads Table Details
+                {t("adsTable.title")}
                 <Typography variant="body1">
-                  You can check all details
+                  {t("adsTable.subtitle")}
                 </Typography>
               </Typography>
             </Grid>
@@ -350,7 +352,7 @@ export default function AdsList() {
                 variant="contained"
                 color="info"
               >
-                Add New Ads
+                {t("adsTable.addNewAds")}
               </Button>
             </Grid>
           </Grid>
@@ -358,7 +360,7 @@ export default function AdsList() {
         <CacheProvider value={muiCache}>
           <Box width={"90%"} mx={"auto"} my={8}>
             <MUIDataTable
-              title={"Ads List"}
+              title={t("adsTable.listTitle")}
               data={ads}
               columns={columns}
               options={options}
@@ -389,7 +391,7 @@ export default function AdsList() {
                 variant="h6"
                 component="h2"
               >
-                {isUpdate ? `Update this ${adName}` : "Add Ads"}
+                {isUpdate ? t("adsTable.updateAd", { name: adName }) : t("adsTable.addAds")}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -407,7 +409,7 @@ export default function AdsList() {
             >
               {!isUpdate ? (
                 <FormControl fullWidth sx={{ mt: 3 }}>
-                  <InputLabel id="demo-simple-select-label">Room</InputLabel>
+                  <InputLabel id="demo-simple-select-label">{t("common.room")}</InputLabel>
                   <Controller
                     name="room"
                     control={control}
@@ -419,7 +421,7 @@ export default function AdsList() {
                         {...field}
                         id="demo-simple-select"
                         value={roomSelect}
-                        label="Room"
+                        label={t("common.room")}
                         onChange={(e) => {
                           handleRoomChange(e);
                           field.onChange(e);
@@ -440,7 +442,7 @@ export default function AdsList() {
               ) : null}
 
               <FormControl fullWidth sx={{ mt: 3 }}>
-                <InputLabel id="isActiveLabel">isActive</InputLabel>
+                <InputLabel id="isActiveLabel">{t("adsTable.isActive")}</InputLabel>
                 <Controller
                   name="isActive"
                   control={control}
@@ -452,7 +454,7 @@ export default function AdsList() {
                       {...field}
                       id="isActive-select"
                       value={String(isActiveSelect)}
-                      label="isActive"
+                      label={t("adsTable.isActive")}
                       onChange={(e) => {
                         handleActiveChange(e);
                         field.onChange(e.target.value === "true");
@@ -481,7 +483,7 @@ export default function AdsList() {
                     fullWidth
                     type="text"
                     id="filled-error"
-                    label="Discount"
+                    label={t("common.discount")}
                     sx={{ mt: 3 }}
                     error={!!errors.discount}
                     helperText={errors.discount ? errors.discount.message : ""}
@@ -498,7 +500,7 @@ export default function AdsList() {
                 {spinner ? (
                   <CircularProgress size={24} color="inherit" />
                 ) : (
-                  "Save"
+                  t("common.save")
                 )}
               </Button>
             </Box>
@@ -527,7 +529,7 @@ export default function AdsList() {
                 variant="h6"
                 component="h2"
               >
-                {`Delete this ${adName}`}
+                {t("adsTable.deleteAd", { name: adName })}
               </Typography>
               <HighlightOff
                 sx={{ cursor: "pointer" }}
@@ -538,11 +540,10 @@ export default function AdsList() {
             <Box py={4} textAlign={"center"}>
               <img src={delImg} alt="" />
               <Typography py={2} variant="body1">
-                {` Delete This ${adName} ?`}
+                {t("adsTable.deleteAd", { name: adName })}
               </Typography>
               <Typography variant="caption">
-                are you sure you want to delete this item ? if you are sure just
-                click on delete it
+                {t("common.deleteConfirm")}
               </Typography>
             </Box>
             <Button
@@ -551,7 +552,7 @@ export default function AdsList() {
               variant="contained"
               color="error"
             >
-              Delete
+              {t("common.delete")}
             </Button>
           </Box>
         </Fade>

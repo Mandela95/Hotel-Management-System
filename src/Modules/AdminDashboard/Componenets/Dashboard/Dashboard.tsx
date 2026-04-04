@@ -2,6 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../../Context/AuthContext/AuthContext";
 import { Charts } from "../../../../Interfaces/interFaces";
 import { PieChart } from "@mui/x-charts/PieChart";
@@ -16,6 +17,7 @@ export default function DashboardHome() {
   const [chartsData, setChartsData] = useState<Charts>({} as Charts);
   const { requestHeaders } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const getCharts = useCallback(async () => {
     try {
@@ -89,7 +91,7 @@ export default function DashboardHome() {
             <Typography
               sx={{ marginTop: "1em", fontWeight: "bold", fontSize: "1.2em" }}
             >
-              Rooms
+              {t("dashboard.rooms")}
             </Typography>
           </Box>
           <Box>
@@ -128,7 +130,7 @@ export default function DashboardHome() {
             <Typography
               sx={{ marginTop: "1em", fontWeight: "bold", fontSize: "1.2em" }}
             >
-              Facilities
+              {t("dashboard.facilities")}
             </Typography>
           </Box>
           <Box>
@@ -167,7 +169,7 @@ export default function DashboardHome() {
             <Typography
               sx={{ marginTop: "1em", fontWeight: "bold", fontSize: "1.2em" }}
             >
-              Ads
+              {t("dashboard.ads")}
             </Typography>
           </Box>
           <Box>
@@ -206,46 +208,46 @@ export default function DashboardHome() {
             borderRadius={2}
             color="white"
           >
-            Bookings Status
+            {t("dashboard.bookingsStatus")}
           </Typography>
           {/* Legend above chart */}
           <Stack direction="row" justifyContent="center" gap={3} mb={2}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Box sx={{ width: 14, height: 14, borderRadius: "50%", bgcolor: "#2196f3" }} />
               <Typography variant="body2">
-                Completed: {chartsData.bookings?.completed ?? 0}
+                {t("dashboard.completed")}: {chartsData.bookings?.completed ?? 0}
               </Typography>
             </Box>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Box sx={{ width: 14, height: 14, borderRadius: "50%", bgcolor: "#ff9800" }} />
               <Typography variant="body2">
-                Pending: {chartsData.bookings?.pending ?? 0}
+                {t("dashboard.pending")}: {chartsData.bookings?.pending ?? 0}
               </Typography>
             </Box>
           </Stack>
           <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
             <PieChart
+              height={250}
+              width={300}
+              margin={{ top: 10, bottom: 10, left: 10, right: 10 }}
               series={[
                 {
                   data: [
                     {
                       id: 0,
                       value: chartsData.bookings?.completed,
-                      label: "Completed",
+                      label: t("dashboard.completed"),
                     },
                     {
                       id: 1,
                       value: chartsData.bookings?.pending,
-                      label: "Pending",
+                      label: t("dashboard.pending"),
                     },
                   ],
-                  cx: 150,
-                  cy: 120,
                 },
               ]}
               slotProps={{ legend: { hidden: true } }}
-              height={250}
-              width={300}
+              
             />
           </Box>
         </Box>
@@ -268,20 +270,20 @@ export default function DashboardHome() {
             borderRadius={2}
             color="white"
           >
-            Users Status
+            {t("dashboard.usersStatus")}
           </Typography>
           {/* Legend above chart to align with Bookings legend */}
           <Stack direction="row" justifyContent="center" gap={3} mb={2}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Box sx={{ width: 14, height: 14, borderRadius: 0.5, bgcolor: "#2e7d32" }} />
               <Typography variant="body2">
-                Admin: {chartsData.users?.admin ?? 0}
+                {t("dashboard.admin")}: {chartsData.users?.admin ?? 0}
               </Typography>
             </Box>
             <Box display="flex" alignItems="center" gap={0.5}>
               <Box sx={{ width: 14, height: 14, borderRadius: 0.5, bgcolor: "#1976d2" }} />
               <Typography variant="body2">
-                User: {chartsData.users?.user ?? 0}
+                {t("dashboard.user")}: {chartsData.users?.user ?? 0}
               </Typography>
             </Box>
           </Stack>
@@ -290,11 +292,11 @@ export default function DashboardHome() {
               height={250}
               width={300}
               series={[
-                { data: [chartsData.users?.admin], label: "Admin", id: "1" },
-                { data: [chartsData.users?.user], label: "User", id: "2" },
-              ]}
+                    { data: [chartsData.users?.admin], label: t("dashboard.admin"), id: "1" },
+                    { data: [chartsData.users?.user], label: t("dashboard.user"), id: "2" },
+                ]}
               slotProps={{ legend: { hidden: true } }}
-            />
+                          />
           </Box>
         </Box>
       </Stack>

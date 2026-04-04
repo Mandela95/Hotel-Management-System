@@ -39,12 +39,15 @@
     "react-swipeable-views": "^0.14.1",
     "react-swipeable-views-utils": "^0.14.1",
     "react-toastify": "^10.0.5",
+    "stylis": "^4.3.6",
+    "stylis-plugin-rtl": "^2.1.1",
     "vite-plugin-require": "^1.0.1"
   },
   "devDependencies": {
     "@types/mui-datatables": "^4.3.12",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/stylis": "^4.2.7",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",

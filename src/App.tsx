@@ -1,7 +1,12 @@
 import { ThemeProvider } from "@emotion/react";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
 import { createTheme, CssBaseline } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import rtlPlugin from "stylis-plugin-rtl";
+import { prefixer } from "stylis";
 import "./App.css";
 import AdsList from "./Modules/AdminDashboard/Componenets/Ads/AdsList/AdsList";
 import BookingsList from "./Modules/AdminDashboard/Componenets/BookingsList/BookingsList";
@@ -46,6 +51,7 @@ declare module "@mui/material/styles" {
 }
 
 export default function App() {
+  const { i18n } = useTranslation();
   const [mode, setTheme] = useState(
     localStorage.getItem("theme") === null
       ? "dark"
@@ -54,7 +60,15 @@ export default function App() {
       : "dark"
   );
 
+  // Handle RTL/LTR direction based on current language
+  useEffect(() => {
+    const dir = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir = dir;
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
+
   const darkTheme = createTheme({
+    direction: i18n.language === "ar" ? "rtl" : "ltr",
     palette: {
       mode,
       ...(mode === "light"
@@ -208,10 +222,23 @@ export default function App() {
       ],
     },
   ], { basename: '/Hotel-Management-System' });
+  // Emotion RTL cache for Arabic
+  const isRtl = i18n.language === "ar";
+  const cacheRtl = useMemo(
+    () =>
+      createCache({
+        key: isRtl ? "muirtl" : "muiltr",
+        stylisPlugins: isRtl ? [prefixer, rtlPlugin] : [prefixer],
+      }),
+    [isRtl]
+  );
+
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <RouterProvider router={routes} />
-    </ThemeProvider>
+    <CacheProvider value={cacheRtl}>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <RouterProvider router={routes} />
+      </ThemeProvider>
+    </CacheProvider>
   );
 }
