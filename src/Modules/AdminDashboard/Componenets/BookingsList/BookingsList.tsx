@@ -233,7 +233,7 @@ export default function BookingsList() {
           </Box>
         </CacheProvider>
       </Box>
-      {/* Showing Booking Deatils In A Table */}
+      {/* Showing Booking Details In A Table */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

@@ -144,7 +144,7 @@
     "price": "Price",
     "startDate": "Start Date",
     "endDate": "End Date",
-    "user": "User",
+    "user": "Role",
     "action": "Action",
     "bookingDetails": "Booking Details",
     "deleteBooking": "Will you Delete {{name}}'s Book ? 😢"
