@@ -7,7 +7,6 @@ import {
   Fade,
   Grid,
   Modal,
-  Stack,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -28,7 +27,7 @@ export default function UsersList() {
   const [users, setUsers] = useState<UsersInterface[]>([]);
   const [open, setOpen] = useState(false);
   const [maxSize, setMaxSize] = useState<number>(10);
-  const [viewedUser, setViewedUser] = useState<UsersInterface>({});
+  const [viewedUser, setViewedUser] = useState<UsersInterface>();
   const { requestHeaders } = useAuth();
   const { t } = useTranslation();
 
@@ -47,37 +46,27 @@ export default function UsersList() {
     {
       label: t("usersTable.userName"),
       name: "userName",
-      options: {
-        customBodyRender: (value: string) => value,
-      },
     },
     {
       label: t("usersTable.email"),
       name: "email",
-      options: {
-        customBodyRender: (value: string) => value,
-      },
     },
     {
       label: t("usersTable.phoneNumber"),
       name: "phoneNumber",
-      options: {
-        customBodyRender: (value: string) => value,
-      },
     },
     {
       label: t("usersTable.country"),
       name: "country",
-      options: {
-        customBodyRender: (value: string) => value,
-      },
     },
     {
       label: t("usersTable.profileImage"),
       name: "profileImage",
       options: {
+        filter: false,
+        sort: false,
         customBodyRender: (value: string) => (
-          <img src={value} alt="Profile" width="50" height="50" />
+          <img src={value} alt="Profile" width="50" height="50" style={{ borderRadius: "50%", objectFit: "cover" }} />
         ),
       },
     },
@@ -86,13 +75,12 @@ export default function UsersList() {
       label: t("usersTable.action"),
       options: {
         filter: false,
+        sort: false,
         customBodyRender: (value: UsersInterface) => (
-          <>
-            <RemoveRedEyeSharp
-              onClick={() => handleView(value)}
-              sx={{ cursor: "pointer" }}
-            />
-          </>
+          <RemoveRedEyeSharp
+            onClick={() => handleView(value)}
+            sx={{ cursor: "pointer" }}
+          />
         ),
       },
     },
@@ -168,24 +156,28 @@ export default function UsersList() {
         <CacheProvider value={muiCache}>
           <Box
             sx={{
-              width: { xs: "calc(100% - 16px)", sm: "90%" },
+              width: "95%",
               mx: "auto",
-              my: 8,
+              my: 4,
               "& .MuiPaper-root": {
                 boxShadow: 2,
                 borderRadius: 2,
-                overflow: "hidden",
+                overflowX: "hidden",
+              },
+              "& .MuiToolbar-root, & thead, & tbody, & tfoot, & table": {
+                direction: "inherit",
               },
               "& .MuiTableContainer-root": {
                 overflowX: "auto",
-              },
-              "& table": {
-                minWidth: { xs: "600px", md: "auto" },
               },
               "& td, & th": {
                 whiteSpace: "nowrap",
                 fontSize: { xs: "0.8rem", sm: "0.875rem" },
                 px: { xs: 1, sm: 2 },
+                textAlign: "start !important",
+              },
+              "& th span": {
+                justifyContent: "start !important",
               },
             }}
           >
@@ -230,47 +222,45 @@ export default function UsersList() {
               />
             </Box>
             <Box width="100%" sx={{ padding: "8px" }}>
-              <Box
-                sx={{ textAlign: "center" }}
-                maxHeight="50vh !important"
-                maxWidth="70vw !important"
-              >
+              <Box sx={{ textAlign: "center", mb: 2 }}>
                 <img
-                  src={viewedUser.profileImage}
-                  alt="iamge"
+                  src={viewedUser?.profileImage}
+                  alt="profile"
                   style={{
                     margin: "auto",
-                    maxWidth: "70vw",
-                    maxHeight: "50vh",
+                    maxWidth: "100%",
+                    maxHeight: "200px",
+                    borderRadius: "8px",
+                    objectFit: "cover",
                   }}
                 />
               </Box>
-              <Stack direction="column" spacing={2} sx={{ p: 0, m: 0 }}>
+              <Box display="flex" flexDirection="column" gap={1}>
                 <Box display="flex" justifyContent="start" alignItems="center">
                   <Typography>{t("usersTable.userName")}:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
-                    {viewedUser.userName}
+                    {viewedUser?.userName}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
                   <Typography>{t("usersTable.email")}:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
-                    {viewedUser.email}
+                    {viewedUser?.email}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
                   <Typography>{t("usersTable.country")}:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
-                    {viewedUser.country}
+                    {viewedUser?.country}
                   </Typography>
                 </Box>
                 <Box display="flex" justifyContent="start" alignItems="center">
                   <Typography>{t("usersTable.phoneNumber")}:</Typography>
                   <Typography fontWeight="bold" color="teal" paddingLeft={1}>
-                    {viewedUser.phoneNumber}
+                    {viewedUser?.phoneNumber}
                   </Typography>
                 </Box>
-              </Stack>
+              </Box>
             </Box>
           </Box>
         </Fade>

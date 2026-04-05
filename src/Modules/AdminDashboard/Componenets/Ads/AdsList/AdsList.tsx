@@ -153,17 +153,18 @@ export default function AdsList() {
         customBodyRender: (value: AdsInterface) => {
           return (
             <>
-              <DeleteForever
-                onClick={() => {
-                  handleDelete(value);
-                }}
-                sx={{ mr: 2, cursor: "pointer" }}
-              />
+              
               <Draw
                 onClick={() => {
                   handleUpdate(value);
                 }}
-                sx={{ cursor: "pointer" }}
+                sx={{ mr: 2, cursor: "pointer", color: "#00f" }}
+              />
+              <DeleteForever
+                onClick={() => {
+                  handleDelete(value);
+                }}
+                sx={{mr: 2, cursor: "pointer", color: "#f00" }}
               />
             </>
           );
@@ -173,10 +174,10 @@ export default function AdsList() {
   ];
 
   const options = {
-    selectableRows: "none",
+    selectableRows: "none" as const,
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 30, ads.length],
-    responsive: "vertical",
+    responsive: "standard" as const,
     download: false,
     print: false,
   };
@@ -358,7 +359,15 @@ export default function AdsList() {
           </Grid>
         </Box>
         <CacheProvider value={muiCache}>
-          <Box width={"90%"} mx={"auto"} my={8}>
+          <Box
+              sx={{
+                width: "95%",
+                mx: "auto",
+                my: 4,
+                "& td, & th": { textAlign: "start !important" },
+                "& th span": { justifyContent: "start" },
+              }}
+            >
             <MUIDataTable
               title={t("adsTable.listTitle")}
               data={ads}

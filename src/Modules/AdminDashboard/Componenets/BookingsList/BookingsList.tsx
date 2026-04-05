@@ -128,14 +128,14 @@ export default function BookingsList() {
               onClick={() => {
                 handleView(value);
               }}
-              sx={{ cursor: "pointer" }}
+              sx={{ mr: 2, cursor: "pointer" }}
             />
             <DeleteForever
               onClick={() => {
                 setDeletedBook(value);
                 setOpenDelete(true);
               }}
-              sx={{ cursor: "pointer", marginLeft: "5px" }}
+              sx={{ cursor: "pointer", mr: 2, color: "#f00" }}
             />
           </>
         ),
@@ -144,10 +144,10 @@ export default function BookingsList() {
   ];
 
   const options = {
-    selectableRows: "none",
+    selectableRows: "none" as const,
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 30, bookings.length],
-    responsive: "vertical",
+    responsive: "standard" as const,
     download: false,
     print: false,
   };
@@ -210,7 +210,20 @@ export default function BookingsList() {
           </Grid>
         </Box>
         <CacheProvider value={muiCache}>
-          <Box width="90%" mx="auto" my={8}>
+          <Box
+              sx={{
+                width: "95%",
+                mx: "auto",
+                my: 4,
+                "& .MuiTableContainer-root": {
+                  overflowX: "auto",
+                  direction: "ltr",
+                },
+                "& table": { direction: "inherit" },
+                "& td, & th": { textAlign: "start !important", whiteSpace: "nowrap" },
+                "& th span": { justifyContent: "start" },
+              }}
+            >
             <MUIDataTable
               title={t("bookingsTable.listTitle")}
               data={bookings}

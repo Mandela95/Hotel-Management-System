@@ -26,12 +26,15 @@ import style from "../Rooms.module.css";
 
 export default function RoomsData() {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
   const [spinner, setSpinner] = useState<boolean>(false);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
   const [facilities, setFacilities] = useState<FacilitiesInterface[]>([]);
   const { requestHeaders } = useAuth();
+  const roomData = location.state?.roomData;
+  const isEditMode = !!roomData;
   const {
     register,
     handleSubmit,
@@ -39,7 +42,6 @@ export default function RoomsData() {
     reset,
     formState: { errors },
   } = useForm<CreateRoom>();
-  const roomData = location.state?.roomData;
   const resetFormValue = () => {
     if (roomData) {
       reset({
@@ -51,6 +53,9 @@ export default function RoomsData() {
           (fac: FacilitiesInterface) => fac._id
         ),
       });
+      if (roomData.images?.length > 0) {
+        setExistingImages(roomData.images);
+      }
     }
   };
 
@@ -102,8 +107,10 @@ export default function RoomsData() {
     for (let i = 0; i < data.facilities.length; i++) {
       formData.append("facilities", data.facilities[i]);
     }
-    for (let i = 0; i < data.imgs.length; i++) {
-      formData.append("imgs", data.imgs[i]);
+    if (data.imgs && data.imgs.length > 0) {
+      for (let i = 0; i < data.imgs.length; i++) {
+        formData.append("imgs", data.imgs[i]);
+      }
     }
     return formData;
   };
@@ -126,8 +133,10 @@ export default function RoomsData() {
               md={6}
             >
               <Typography variant="h5" fontWeight={"500"}>
-                Add Room
-                <Typography variant="body1">You can add new room</Typography>
+                {isEditMode ? "Edit Room" : "Add Room"}
+                <Typography variant="body1">
+                  {isEditMode ? "You can edit room details" : "You can add new room"}
+                </Typography>
               </Typography>
             </Grid>
             <Grid
@@ -278,7 +287,6 @@ export default function RoomsData() {
                   name="facilities"
                   control={control}
                   defaultValue={[]}
-                  type="text"
                   rules={{
                     required: "Facilities Is Required",
                   }}
@@ -318,19 +326,25 @@ export default function RoomsData() {
               <Box width={"100%"} className="mb-2">
                 <input
                   {...register("imgs", {
-                    required: "Images is Required",
+                    required: isEditMode ? false : "Images is Required",
                   })}
                   type="file"
                   accept="image/*"
                   multiple
                   onChange={(e) => {
                     const selectedFiles = e.target.files;
+                    if (!selectedFiles || selectedFiles.length === 0) {
+                      setSelectedImages([]);
+                      setIsClicked(false);
+                      return;
+                    }
                     const selectedFilesArr = Array.from(selectedFiles);
                     const imgsArr = selectedFilesArr.map((img) => {
                       return URL.createObjectURL(img);
                     });
                     setSelectedImages(imgsArr);
-                    selectedFilesArr?.length > 5
+                    setExistingImages([]);
+                    selectedFilesArr.length > 5
                       ? setIsClicked(true)
                       : setIsClicked(false);
                   }}
@@ -352,6 +366,33 @@ export default function RoomsData() {
                   </Box>
                   <span>Choose an Item Images to Upload</span>
                 </Box>
+
+                {/* Existing images preview (edit mode, no new files selected) */}
+                {isEditMode && existingImages.length > 0 && selectedImages.length === 0 && (
+                  <>
+                    <Box display={"flex"} mb={1} justifyContent={"center"}>
+                      <Typography variant="body2" color="text.secondary">
+                        Current images — select new files above to replace them
+                      </Typography>
+                    </Box>
+                    <Box display={"flex"} justifyContent={"center"} flexWrap={"wrap"} gap={1}>
+                      {existingImages.map((img, i) => (
+                        <Box display={"flex"} mx={1} key={i}>
+                          <Box sx={{ flexGrow: 1 }}>
+                            <img
+                              width={"100%"}
+                              height={"100px"}
+                              src={img}
+                              alt={`room-image-${i + 1}`}
+                              style={{ objectFit: "cover", borderRadius: 4 }}
+                            />
+                          </Box>
+                        </Box>
+                      ))}
+                    </Box>
+                  </>
+                )}
+
                 {selectedImages.length > 0 && (
                   <>
                     <Box display={"flex"} mb={1} justifyContent={"center"}>
@@ -379,7 +420,7 @@ export default function RoomsData() {
                     )}
                   </>
                 )}
-                <Box display={"flex"} justifyContent={"center"}>
+                <Box display={"flex"} justifyContent={"center"} flexWrap={"wrap"} gap={1}>
                   {selectedImages &&
                     selectedImages.map((img, i) => {
                       return (
@@ -402,17 +443,6 @@ export default function RoomsData() {
                 <Typography sx={{ ml: 2 }} variant="caption" color="error">
                   {errors.imgs.message}
                 </Typography>
-              )}
-              {roomData && selectedImages.length === 0 && (
-                <span
-                  style={{
-                    padding: "10px",
-                    fontWeight: "bold",
-                    color: "red",
-                  }}
-                >
-                  Upload new images please !!
-                </span>
               )}
             </Box>
 

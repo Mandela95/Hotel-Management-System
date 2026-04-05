@@ -107,13 +107,14 @@ export default function FacilitiesList() {
         customBodyRender: (value: { id: string; name: string }) => {
           return (
             <>
-              <DeleteForever
-                onClick={() => handleDelete(value.id, value.name)}
-                sx={{ mr: 2, cursor: "pointer" }}
-              />
+              
               <Draw
                 onClick={() => handleUpdate(value.id, value.name)}
-                sx={{ cursor: "pointer" }}
+                sx={{ mr: 2, cursor: "pointer", color: "#00f" }}
+              />
+              <DeleteForever
+                onClick={() => handleDelete(value.id, value.name)}
+                sx={{ mr: 2, cursor: "pointer", color: "#f00" }}
               />
             </>
           );
@@ -122,7 +123,7 @@ export default function FacilitiesList() {
     },
   ];
 
-  const options = {
+  const options: Partial<import("mui-datatables").MUIDataTableOptions> = {
     selectableRows: "none",
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 30, facilities.length],
@@ -269,7 +270,15 @@ export default function FacilitiesList() {
           </Grid>
         </Box>
         <CacheProvider value={muiCache}>
-          <Box width={"90%"} mx={"auto"} my={8}>
+          <Box
+              sx={{
+                width: "95%",
+                mx: "auto",
+                my: 4,
+                "& td, & th": { textAlign: "start !important" },
+                "& th span": { justifyContent: "start" },
+              }}
+            >
             <MUIDataTable
               title={t("facilitiesTable.listTitle")}
               data={facilities}
