@@ -15,11 +15,20 @@ This project demonstrates best practices in React SPA development, state managem
 
 ![Hotel-Management-System(Home)](https://raw.githubusercontent.com/Mandela95/Hotel-Management-System/refs/heads/main/Home.png)
 
-![Hotel-Management-System(Users)](https://raw.githubusercontent.com/Mandela95/Hotel-Management-System/refs/heads/main/Users%20Modal.png)
+![Hotel-Management-System(Users)](https://raw.githubusercontent.com/Mandela95/Hotel-Management-System/refs/heads/main/Users%20dark%20ar.png
+)
 
-![Hotel-Management-System(Ads)](https://github.com/Mandela95/Hotel-Management-System/blob/main/Adds.png)
+![Hotel-Management-System(User modal)](https://raw.githubusercontent.com/Mandela95/Hotel-Management-System/refs/heads/main/Users%20Modal.png)
+
+![Hotel-Management-System(Edit Room)](https://raw.githubusercontent.com/Mandela95/Hotel-Management-System/refs/heads/main/Edit%20Room.png
+)
+
+![Hotel-Management-System(Ads)](https://github.com/Mandela95/Hotel-Management-System/blob/main/Ads.png)
 
 ![Hotel-Management-System(Bookings)](https://raw.githubusercontent.com/Mandela95/Hotel-Management-System/refs/heads/main/Bookings.png)
 
 ![Hotel-Management-System(Profile)](https://raw.githubusercontent.com/Mandela95/Hotel-Management-System/refs/heads/main/Profile.png)
 
+Mobile:
+
+![Hotel-Management-System(Mobile Home)](https://raw.githubusercontent.com/Mandela95/Hotel-Management-System/refs/heads/main/Mobile.png)
